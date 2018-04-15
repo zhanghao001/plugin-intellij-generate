@@ -1,0 +1,14 @@
+public class ${name} {
+    <#list fields as field>
+    /**
+     * ${field.comment}
+     */
+    private ${field.typeName} ${field.fieldName};
+    </#list>
+    <#list methods as method>
+
+    public ${method.returnTypeName} ${method.methodName}(<#list method.args as arg>${arg.typeName} ${arg.fieldName}</#list>){
+        ${method.methodContent}
+    }
+    </#list>
+}

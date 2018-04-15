@@ -1,6 +1,7 @@
 package com.alibaba.goc.plugin.action;
 
-import com.alibaba.goc.plugin.util.NotificationUtils;
+import com.alibaba.goc.plugin.convert.DOConvert;
+import com.alibaba.goc.plugin.model.DOModel;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -8,14 +9,11 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.javadoc.PsiDocCommentImpl;
-import com.intellij.psi.impl.source.tree.PsiCommentImpl;
-import org.apache.commons.lang3.StringUtils;
-import org.fest.util.Lists;
+
+import java.io.File;
 
 /**
  * 程序入口.<br/>
@@ -39,48 +37,27 @@ public class GenerateAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        // TODO: insert action logic here
         Project project = e.getProject();
         PsiFile file = e.getData(LangDataKeys.PSI_FILE);
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
         if (file == null || editor == null) {
             e.getPresentation().setEnabled(false);
         }
-        //获取当前的java类,以及他的所有字段
+        //获取当前的java类
         PsiClass psiClass = OverrideImplementUtil.getContextClass(e.getProject(), editor, file, false);
-        String classComment = parseComment(psiClass);
-        PsiField[] allFields = psiClass.getAllFields();
-        Lists.newArrayList(allFields).forEach(item -> {
-            NotificationUtils.showEventLog(classComment, item.getName(), formatField(item), project);
-        });
+        String dalPath = project.getBasePath() + File.separator + "dal" + File.separator;
+
+        dalPath += "src" + File.separator + "main" + File.separator + "java" + File.separator;
+        //转化为do模型
+        DOModel model = DOConvert.convertClassToModel(psiClass, project);
+        model.setFilePath(dalPath);
+        TemplateHandler.generateDO(model);
+        System.out.println(model);
+        VirtualFileManager.getInstance().syncRefresh();
+        project.getWorkspaceFile().refresh(false, true);
+        project.getProjectFile().refresh(false, true);
+        project.getBaseDir().refresh(false, true);
     }
 
-    private String formatField(PsiField field) {
-        String template = "类型:%s 名称:%s 注释:%s";
-        return String.format(template, field.getName(), field.getType().getCanonicalText(), parseComment(field));
-    }
 
-    private String parseComment(PsiElement element) {
-        if (element == null) {
-            return StringUtils.EMPTY;
-        }
-        PsiElement[] children = element.getChildren();
-        for (PsiElement child : children) {
-            String text = child.getText();
-            if (child instanceof PsiDocCommentImpl || child instanceof PsiCommentImpl) {
-                return formatText(text);
-            }
-        }
-        return StringUtils.EMPTY;
-    }
-
-    private String formatText(String text) {
-        text = text.replace("/*", "");
-        text = text.replace("*/", "");
-        text = text.replace("//", "");
-        text = text.replace("\n", "");
-        text = text.replace("*", "");
-        text = text.trim();
-        return text;
-    }
 }
