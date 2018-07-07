@@ -9,6 +9,9 @@ import freemarker.template.TemplateException;
 import java.io.*;
 import java.util.Map;
 
+/**
+ * freemark渲染模板,生成文件到指定位置
+ */
 public class TemplateHandler {
 
     public static void generateDO(DOModel doModel) {

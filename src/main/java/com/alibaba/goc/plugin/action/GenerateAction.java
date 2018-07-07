@@ -2,6 +2,8 @@ package com.alibaba.goc.plugin.action;
 
 import com.alibaba.goc.plugin.convert.DOConvert;
 import com.alibaba.goc.plugin.model.DOModel;
+import com.alibaba.goc.plugin.setting.SettingProvider;
+import com.alibaba.goc.plugin.util.NotificationUtils;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -37,6 +39,12 @@ public class GenerateAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+
+        System.out.print(1123);
+
+        System.out.println(SettingProvider.create(e.getProject()).getApikey());
+        System.out.print(5678);
+
         Project project = e.getProject();
         PsiFile file = e.getData(LangDataKeys.PSI_FILE);
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
@@ -48,6 +56,7 @@ public class GenerateAction extends AnAction {
         String dalPath = project.getBasePath() + File.separator + "dal" + File.separator;
 
         dalPath += "src" + File.separator + "main" + File.separator + "java" + File.separator;
+        NotificationUtils.showEventLog("code-generate", "do generate", "file path = " + dalPath, project);
         //转化为do模型
         DOModel model = DOConvert.convertClassToModel(psiClass, project);
         model.setFilePath(dalPath);
@@ -57,6 +66,8 @@ public class GenerateAction extends AnAction {
         project.getWorkspaceFile().refresh(false, true);
         project.getProjectFile().refresh(false, true);
         project.getBaseDir().refresh(false, true);
+
+
     }
 
 

@@ -23,7 +23,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 intellij {
-    version 'IU-181.4445.78' //IntelliJ IDEA dependency
+    version 'IU-181.5281.24' //IntelliJ IDEA dependency
     plugins 'coverage' //Bundled plugin dependencies
     pluginName 'codehelper.generator'
     updateSinceUntilBuild false

@@ -26,6 +26,11 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
+      <!-- Add your extensions here -->
+      <projectConfigurable instance="com.alibaba.goc.plugin.setting.SettingConfig" groupId="tools"
+                           groupWeight="130" displayName="Leanpub"/>
+      <projectService serviceInterface="com.alibaba.goc.plugin.setting.SettingProvider"
+                      serviceImplementation="com.alibaba.goc.plugin.setting.SettingProvider"/>
   </extensions>
 
   <actions>

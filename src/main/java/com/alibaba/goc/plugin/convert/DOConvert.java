@@ -14,6 +14,13 @@ import org.fest.util.Lists;
 
 public class DOConvert {
 
+    /**
+     * 生成DO文件需要的Model
+     *
+     * @param psiClass
+     * @param project
+     * @return
+     */
     public static DOModel convertClassToModel(PsiClass psiClass, Project project) {
         DOModel model = new DOModel();
         String classComment = parseComment(psiClass);
