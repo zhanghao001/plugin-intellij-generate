@@ -12,3 +12,7 @@ https://github.com/chriskempson/tomorrow-theme
 
 
 https://www.cnblogs.com/memory4young/p/about-oh-my-zsh-plugin-sublime.html
+
+
+
+https://blog.csdn.net/IceTeaSet/article/details/69668471
