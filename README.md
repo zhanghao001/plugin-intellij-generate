@@ -10,3 +10,5 @@ https://hufangyun.com/2017/zsh-plugin/
 
 https://github.com/chriskempson/tomorrow-theme
 
+
+https://www.cnblogs.com/memory4young/p/about-oh-my-zsh-plugin-sublime.html
